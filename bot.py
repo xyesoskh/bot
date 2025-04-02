@@ -1,10 +1,22 @@
 import telebot
+import threading
+import time
 
 TOKEN = "8148889670:AAGeNNbk-KHhufgRQ1CYLNeMfQDJf6n8pyE"
 ADMIN_ID = 5626257612  # Твой Telegram ID
 
+
 bot = telebot.TeleBot(TOKEN)
 user_messages = {}  # Хранит соответствие message_id ↔ user_id
+
+# Функция для предотвращения сна Railway
+def prevent_sleep():
+    while True:
+        print("👀Бот не спит!")
+        time.sleep(300)  # Пауза в 5 минут
+
+# Запускаем поток, который не даст Railway уснуть
+threading.Thread(target=prevent_sleep, daemon=True).start()
 
 # Получаем сообщения от пользователей и отправляем админу
 user_cache = set()  # Храним ID пользователей, чтобы отправить важное сообщение только 1 раз
