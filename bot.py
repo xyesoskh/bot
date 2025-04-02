@@ -39,7 +39,6 @@ def handle_message(message):
     # Отправляем стандартное сообщение
     if message.chat.id != ADMIN_ID:
         bot.send_message(message.chat.id, "✅ Ваше сообщение получено! Ожидайте ответа от администратора.")
-     )
     user_messages[msg.message_id] = message.chat.id  # Запоминаем, кому ответить
 
 # Обрабатываем ответы админа
