@@ -26,7 +26,7 @@ def reply_to_user(message):
         user_id = original_message.split("(ID: ")[-1].split(")")[0]
 
         # Отправляем ответ пользователю
-        bot.send_message(user_id, f"Ответ от администратора:\n{message.text}")
+        bot.send_message(user_id, f"Ответ от проекта:\n\n{message.text}")
 
         # Уведомляем админа, что ответ отправлен
         bot.send_message(ADMIN_ID, f"✅ Ответ отправлен!\n🆔 ID: {user_id}\n✉️ Текст: {message.text}")
