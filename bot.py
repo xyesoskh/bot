@@ -16,14 +16,21 @@ def forward_to_admin(message):
     user_messages[msg.message_id] = message.chat.id  # Запоминаем, кому ответить
 
 # Обрабатываем ответы админа
-@bot.message_handler(func=lambda message: message.chat.id == ADMIN_ID and message.reply_to_message)
-def reply_to_user(message):
-    original_message_id = message.reply_to_message.message_id  # ID сообщения, на которое админ отвечает
-    
-    if original_message_id in user_messages:
-        user_id = user_messages[original_message_id]  # Получаем ID пользователя
-        bot.send_message(user_id, f"Ответ от администратора:\n{message.text}")
-    else:
-        bot.send_message(ADMIN_ID, "Ошибка: не найден ID пользователя для ответа.")
+ADMIN_ID = 5626257612  # Твой Telegram ID
 
+@bot.message_handler(func=lambda message: message.reply_to_message and str(message.reply_to_message.chat.id) == str(ADMIN_ID))
+def reply_to_user(message):
+    try:
+        # Получаем ID пользователя из пересланного сообщения
+        original_message = message.reply_to_message.text
+        user_id = original_message.split("(ID: ")[-1].split(")")[0]
+
+        # Отправляем ответ пользователю
+        bot.send_message(user_id, f"Ответ от администратора:\n{message.text}")
+
+        # Уведомляем админа, что ответ отправлен
+        bot.send_message(ADMIN_ID, f"✅ Ответ отправлен!\n🆔 ID: {user_id}\n✉️ Текст: {message.text}")
+
+    except Exception as e:
+        bot.send_message(ADMIN_ID, f"❌ Ошибка при отправке ответа: {e}")
 bot.polling(none_stop=True)
